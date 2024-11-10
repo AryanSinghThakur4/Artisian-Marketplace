@@ -1,0 +1,257 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisan Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+        const { useState } = React;
+
+        const products = [
+            { id: 1, name: 'Handmade Necklace', price: 25, image: 'https://placehold.co/300x300?text=Handmade+Necklace', description: 'A beautiful handmade necklace with intricate designs.', category: 'Jewelry' },
+            { id: 2, name: 'Artisan Bracelet', price: 15, image: 'https://placehold.co/300x300?text=Artisan+Bracelet', description: 'A unique artisan bracelet made with love.', category: 'Jewelry' },
+            { id: 3, name: 'Custom Earrings', price: 20, image: 'https://placehold.co/300x300?text=Custom+Earrings', description: 'Custom earrings tailored to your style.', category: 'Jewelry' },
+            { id: 4, name: 'Handcrafted Ring', price: 30, image: 'https://placehold.co/300x300?text=Handcrafted+Ring', description: 'A handcrafted ring with a personal touch.', category: 'Jewelry' },
+            { id: 5, name: 'Beaded Anklet', price: 10, image: 'https://placehold.co/300x300?text=Beaded+Anklet', description: 'A colorful beaded anklet perfect for summer.', category: 'Jewelry' },
+            { id: 6, name: 'Leather Wallet', price: 40, image: 'https://placehold.co/300x300?text=Leather+Wallet', description: 'A durable leather wallet for everyday use.', category: 'Accessories' },
+            { id: 7, name: 'Woven Scarf', price: 35, image: 'https://placehold.co/300x300?text=Woven+Scarf', description: 'A warm woven scarf for chilly days.', category: 'Accessories' },
+            { id: 8, name: 'Handmade Pottery', price: 50, image: 'https://placehold.co/300x300?text=Handmade+Pottery', description: 'Beautiful handmade pottery for your home.', category: 'Home Decor' },
+            { id: 9, name: 'Knitted Hat', price: 20, image: 'https://placehold.co/300x300?text=Knitted+Hat', description: 'A cozy knitted hat for winter.', category: 'Accessories' },
+            { id: 10, name: 'Wooden Spoon', price: 12, image: 'https://placehold.co/300x300?text=Wooden+Spoon', description: 'A handcrafted wooden spoon for your kitchen.', category: 'Kitchen' },
+            { id: 11, name: 'Hand-painted Mug', price: 18, image: 'https://placehold.co/300x300?text=Hand-painted+Mug', description: 'A unique hand-painted mug for your coffee.', category: 'Kitchen' },
+            { id: 12, name: 'Embroidered Pillow', price: 45, image: 'https://placehold.co/300x300?text=Embroidered+Pillow', description: 'An embroidered pillow to decorate your home.', category: 'Home Decor' },
+            { id: 13, name: 'Ceramic Vase', price: 55, image: 'https://placehold.co/300x300?text=Ceramic+Vase', description: 'A stunning ceramic vase for your flowers.', category: 'Home Decor' },
+            { id: 14, name: 'Hand-sewn Tote Bag', price: 25, image: 'https://placehold.co/300x300?text=Hand-sewn+Tote+Bag', description: 'A practical hand-sewn tote bag for shopping.', category: 'Accessories' },
+            { id: 15, name: 'Macrame Wall Hanging', price: 60, image: 'https://placehold.co/300x300?text=Macrame+Wall+Hanging', description: 'A beautiful macrame wall hanging for your home.', category: 'Home Decor' }
+        ];
+
+        const categories = ['All', 'Jewelry', 'Accessories', 'Home Decor', 'Kitchen'];
+
+        function App() {
+            const [currentPage, setCurrentPage] = useState('home');
+            const [cart, setCart] = useState([]);
+            const [selectedCategory, setSelectedCategory] = useState('All');
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+            const addToCart = (product) => {
+                setCart([...cart, product]);
+            };
+
+            const removeFromCart = (product) => {
+                setCart(cart.filter(item => item.id !== product.id));
+            };
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                setIsLoggedIn(true);
+                setCurrentPage('home');
+            };
+
+            const handleLogout = () => {
+                setIsLoggedIn(false);
+                setCurrentPage('home');
+            };
+
+            const renderContent = () => {
+                switch (currentPage) {
+                    case 'home':
+                        return (
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-800 mb-6">Welcome to Artisan Marketplace</h1>
+                                <p className="text-gray-600 mb-6">Discover unique handmade products crafted with love by talented artisans. Our platform is designed to help small businesses grow digitally without technical or financial barriers.</p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                    {products.map(product => (
+                                        <div key={product.id} className="bg-white shadow-md rounded-lg overflow-hidden">
+                                            <img src={product.image} alt={product.description} className="w-full h-48 object-cover"/>
+                                            <div className="p-4">
+                                                <h2 className="text-xl font-bold text-gray-800">{product.name}</h2>
+                                                <p className="text-gray-600 mt-2">{product.description}</p>
+                                                <div className="flex items-center justify-between mt-4">
+                                                    <span className="text-gray-800 font-bold">${product.price}</span>
+                                                    <button onClick={() => addToCart(product)} className="px-3 py-1 bg-gray-800 text-white text-xs font-bold uppercase rounded">Add to Cart</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    case 'about':
+                        return (
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-800 mb-6">About Us</h1>
+                                <p className="text-gray-600 mb-6">Artisan Marketplace is dedicated to providing a simple, user-friendly platform for home-based artisans to showcase their handmade products. Our mission is to support small businesses by offering an affordable and accessible online marketplace.</p>
+                                <p className="text-gray-600 mb-6">We believe in the power of creativity and craftsmanship. Every product on our platform is made with care and attention to detail, ensuring that you receive high-quality, unique items that you won't find anywhere else.</p>
+                                <p className="text-gray-600 mb-6">Join us in celebrating the art of handmade products and supporting talented artisans from around the world.</p>
+                            </div>
+                        );
+                    case 'contact':
+                        return (
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-800 mb-6">Contact Us</h1>
+                                <p className="text-gray-600 mb-6">We'd love to hear from you! Whether you have questions about our products, need assistance with your order, or just want to say hello, feel free to reach out to us.</p>
+                                <form className="bg-white shadow-md rounded-lg p-6">
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">Name</label>
+                                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Your name"/>
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
+                                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Your email"/>
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">Message</label>
+                                        <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message" placeholder="Your message"></textarea>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <button className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">Send</button>
+                                    </div>
+                                </form>
+                            </div>
+                        );
+                    case 'products':
+                        const filteredProducts = selectedCategory === 'All' ? products : products.filter(product => product.category === selectedCategory);
+                        return (
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-800 mb-6">Products</h1>
+                                <div className="mb-6">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">Select Category</label>
+                                    <select id="category" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                                        {categories.map(category => (
+                                            <option key={category} value={category}>{category}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                    {filteredProducts.map(product => (
+                                        <div key={product.id} className="bg-white shadow-md rounded-lg overflow-hidden">
+                                            <img src={product.image} alt={product.description} className="w-full h-48 object-cover"/>
+                                            <div className="p-4">
+                                                <h2 className="text-xl font-bold text-gray-800">{product.name}</h2>
+                                                <p className="text-gray-600 mt-2">{product.description}</p>
+                                                <div className="flex items-center justify-between mt-4">
+                                                    <span className="text-gray-800 font-bold">${product.price}</span>
+                                                    <button onClick={() => addToCart(product)} className="px-3 py-1 bg-gray-800 text-white text-xs font-bold uppercase rounded">Add to Cart</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    case 'cart':
+                        return (
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-800 mb-6">Shopping Cart</h1>
+                                {cart.length === 0 ? (
+                                    <p className="text-gray-600">Your cart is empty.</p>
+                                ) : (
+                                    <div className="grid grid-cols-1 gap-6">
+                                        {cart.map((item, index) => (
+                                            <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden">
+                                                <img src={item.image} alt={item.description} className="w-full h-48 object-cover"/>
+                                                <div className="p-4">
+                                                    <h2 className="text-xl font-bold text-gray-800">{item.name}</h2>
+                                                    <p className="text-gray-600 mt-2">{item.description}</p>
+                                                    <div className="flex items-center justify-between mt-4">
+                                                        <span className="text-gray-800 font-bold">${item.price}</span>
+                                                        <button onClick={() => removeFromCart(item)} className="px-3 py-1 bg-red-600 text-white text-xs font-bold uppercase rounded">Remove</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <div className="mt-6">
+                                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Options</h2>
+                                            <div className="flex space-x-4">
+                                                <button className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Pay with Credit Card</button>
+                                                <button className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Pay with UPI</button>
+                                                <button className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cash on Delivery</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    case 'login':
+                        return (
+                            <div className="flex justify-center items-center h-screen">
+                                <div className="bg-white shadow-md rounded-lg p-8">
+                                    <h1 className="text-3xl font-bold text-gray-800 mb-6">Login</h1>
+                                    <form onSubmit={handleLogin}>
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
+                                            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email" required />
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Password</label>
+                                            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password" required />
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <button className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Login</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        );
+                    default:
+                        return null;
+                }
+            };
+
+            return (
+                <div>
+                    <header className="bg-white shadow">
+                        <div className="container mx-auto px-6 py-3">
+                            <div className="flex items-center justify-between">
+                                <div className="text-2xl font-bold text-gray-800">Artisan Marketplace</div>
+                                <nav className="flex space-x-4">
+                                    <button onClick={() => setCurrentPage('home')} className="text-gray-800 hover:text-gray-600">Home</button>
+                                    <button onClick={() => setCurrentPage('products')} className="text-gray-800 hover:text-gray-600">Products</button>
+                                    <button onClick={() => setCurrentPage('about')} className="text-gray-800 hover:text-gray-600">About</button>
+                                    <button onClick={() => setCurrentPage('contact')} className="text-gray-800 hover:text-gray-600">Contact</button>
+                                    <button onClick={() => setCurrentPage('cart')} className="text-gray-800 hover:text-gray-600">Cart ({cart.length})</button>
+                                    {isLoggedIn ? (
+                                        <button onClick={handleLogout} className="text-gray-800 hover:text-gray-600">Logout</button>
+                                    ) : (
+                                        <button onClick={() => setCurrentPage('login')} className="text-gray-800 hover:text-gray-600">Login</button>
+                                    )}
+                                </nav>
+                            </div>
+                        </div>
+                    </header>
+                    <main className="container mx-auto px-6 py-8">
+                        {renderContent()}
+                    </main>
+                    <footer className="bg-white shadow mt-8">
+                        <div className="container mx-auto px-6 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="text-gray-800">&copy; 2023 Artisan Marketplace</div>
+                                <div className="flex space-x-4">
+                                    <a href="#" className="text-gray-800 hover:text-gray-600"><i className="fab fa-facebook"></i></a>
+                                    <a href="#" className="text-gray-800 hover:text-gray-600"><i className="fab fa-twitter"></i></a>
+                                    <a href="#" className="text-gray-800 hover:text-gray-600"><i className="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
